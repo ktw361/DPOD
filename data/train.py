@@ -94,7 +94,8 @@ class PatchDatasetRGB2CORR(Dataset):
 
         for i in range(number):
             idx = np.random.randint(len(self.images))
-            patch_rgb = cv2.imread(self.images[idx], -1) / 255
+            # Patch itself size: e.g. (136, 147)
+            patch_rgb = cv2.imread(self.images[idx], -1) / 255  # -1 indicates: Read with Alpha channel
             patch_mask = (patch_rgb[:, :, 3] != 0).astype(np.uint8)
             patch_normals = (cv2.imread(self.images[idx].replace('img', 'nor')) / 255) * 2 - 1
             patch_corr = cv2.imread(self.images[idx].replace('img', 'corr'), -1)
@@ -105,7 +106,7 @@ class PatchDatasetRGB2CORR(Dataset):
             patch_rgb = cv2.resize(patch_rgb, None, fx=scale, fy=scale, interpolation=cv2.INTER_LINEAR)
             patch_mask = cv2.resize(patch_mask, None, fx=scale, fy=scale, interpolation=cv2.INTER_NEAREST).astype(bool)
             patch_normals = cv2.resize(patch_normals, None, fx=scale, fy=scale, interpolation=cv2.INTER_LINEAR)
-            patch_a = np.expand_dims(patch_rgb[:, :, 3], axis=2)
+            patch_a = np.expand_dims(patch_rgb[:, :, 3], axis=2)  # alpha channel mostly closed to 1, but edges 0~1
             patch_corr = cv2.resize(patch_corr, None, fx=scale, fy=scale, interpolation=cv2.INTER_LINEAR)
 
             # normalize normals

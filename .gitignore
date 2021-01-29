@@ -1,0 +1,8 @@
+.idea
+.tags
+__pycache__/
+.DS_Store
+log/
+dpod_synthetic/
+db_full/
+lm_dataset
